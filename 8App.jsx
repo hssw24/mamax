@@ -45,19 +45,22 @@ document.addEventListener("DOMContentLoaded", function () {
             endGame();
             return;
         }
-
+    
         let number;
+        let remainingTasks = Object.entries(questionCounts).filter(([_, count]) => count < 3).length; // Anzahl verbleibender Aufgaben
+        
         do {
             number = Math.floor(Math.random() * 10) + 1;
-        } while (number === lastNumber || (questionCounts[number] && questionCounts[number] >= 3));
+        } while (remainingTasks > 3 && number === lastNumber || (questionCounts[number] && questionCounts[number] >= 3)); 
+        // Erlaubt doppelte Aufgaben nacheinander, wenn nur noch 3 oder weniger übrig sind
         
         lastNumber = number;
-        correctAnswer = number * 8; // Welche Zahlenreihe?
+        correctAnswer = number * 8;
         questionCounts[number] = (questionCounts[number] || 0) + 1;
-        question.textContent = `${number} × 8 = ?`; // Rechenaufgabe am Bildschirm
+        question.textContent = `${number} × 8 = ?`;
         generateAnswerButtons();
     }
-
+    
     function generateAnswerButtons() {
         buttonsContainer.innerHTML = "";
         let answers = Array.from({ length: 10 }, (_, i) => (i + 1) * 8); // Mögliche Antworten 

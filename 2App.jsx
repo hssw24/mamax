@@ -40,6 +40,28 @@ document.addEventListener("DOMContentLoaded", function () {
         logContainer.prepend(logEntry);
     }
 
+function generateQuestion() {
+    if (Object.values(questionCounts).reduce((a, b) => a + b, 0) >= totalQuestions) {
+        endGame();
+        return;
+    }
+
+    let number;
+    let remainingTasks = Object.entries(questionCounts).filter(([_, count]) => count < 3).length; // Anzahl verbleibender Aufgaben
+    
+    do {
+        number = Math.floor(Math.random() * 10) + 1;
+    } while (remainingTasks > 3 && number === lastNumber || (questionCounts[number] && questionCounts[number] >= 3)); 
+    // Erlaubt doppelte Aufgaben nacheinander, wenn nur noch 3 oder weniger übrig sind
+    
+    lastNumber = number;
+    correctAnswer = number * 2;
+    questionCounts[number] = (questionCounts[number] || 0) + 1;
+    question.textContent = `${number} × 2 = ?`;
+    generateAnswerButtons();
+}
+
+/*
     function generateQuestion() {
         if (Object.values(questionCounts).reduce((a, b) => a + b, 0) >= totalQuestions) {
             endGame();
@@ -57,6 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         question.textContent = `${number} × 2 = ?`; // Rechenaufgabe am Bildschirm
         generateAnswerButtons();
     }
+*/
 
     function generateAnswerButtons() {
         buttonsContainer.innerHTML = "";
