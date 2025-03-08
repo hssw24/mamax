@@ -3,13 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const buttonsContainer = document.getElementById("buttons-container");
     const statsContainer = document.getElementById("stats");
     const logContainer = document.getElementById("log");
-    
-    const remainingQuestionsContainer = document.createElement("div");
-    remainingQuestionsContainer.id = "remaining-questions";
-    remainingQuestionsContainer.style.marginTop = "10px";
-    remainingQuestionsContainer.style.fontSize = "16px";
-    statsContainer.appendChild(remainingQuestionsContainer);
-
     const restartButton = document.createElement("button");
     restartButton.textContent = "Nochmal spielen?";
     restartButton.style.display = "none";
@@ -33,13 +26,12 @@ document.addEventListener("DOMContentLoaded", function () {
     let correctCount = 0;
     let incorrectCount = 0;
     let startTime = Date.now();
-    let totalQuestions = 10 * 3;
-    let remainingQuestions = Array(10).fill(3);
+    let questionCounts = {};
+    let totalQuestions = 10 * 3; // Jede Aufgabe 3-mal abfragen
 
     function updateStats() {
         let elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
         statsContainer.textContent = `Richtig: ${correctCount} | Falsch: ${incorrectCount} | Zeit: ${elapsedTime}s`;
-        remainingQuestionsContainer.textContent = `Verbleibende Aufgaben: ${remainingQuestions.map((count, index) => `${index + 1}x5 (${count})`).join(", ")}`;
     }
 
     function logIncorrectAnswer(givenAnswer, correctAnswer) {
@@ -49,23 +41,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function generateQuestion() {
-        if (remainingQuestions.reduce((a, b) => a + b, 0) === 0) {
+        if (Object.values(questionCounts).reduce((a, b) => a + b, 0) >= totalQuestions) {
             endGame();
             return;
         }
 
-        let availableNumbers = remainingQuestions
-            .map((count, index) => (count > 0 ? index + 1 : null))
-            .filter(n => n !== null);
-        
-        let number = availableNumbers[Math.floor(Math.random() * availableNumbers.length)];
+        let number;
+        do {
+            number = Math.floor(Math.random() * 10) + 1;
+        } while (number === lastNumber || (questionCounts[number] && questionCounts[number] >= 3));
         
         lastNumber = number;
         correctAnswer = number * 5;
-        remainingQuestions[number - 1]--;
+        questionCounts[number] = (questionCounts[number] || 0) + 1;
         question.textContent = `${number} × 5 = ?`;
         generateAnswerButtons();
-        updateStats();
     }
 
     function generateAnswerButtons() {
@@ -106,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
         correctCount = 0;
         incorrectCount = 0;
         startTime = Date.now();
-        remainingQuestions = Array(10).fill(3);
+        questionCounts = {};
         restartButton.style.display = "none";
         logContainer.innerHTML = "";
         generateQuestion();
