@@ -3,30 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5er-Reihe Trainer</title>
+    <title>2er- bis 9er-Trainer</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             text-align: center;
-            margin: 20px;
-        }
-        .answer-button {
-            display: block;
-            width: 100px;
-            margin: 10px auto;
+            background-color: #ffebcd;
+            font-family: Arial, sans-serif;
             padding: 10px;
-            font-size: 18px;
+        }
+        h1 {
+            color: #ff4500;
+            font-size: 2em;
+        }
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .button {
+            background-color: #ff69b4;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1.2em;
+            border-radius: 10px;
             cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s;
+            width: 100%;
+            max-width: 200px;
+        }
+        .button:hover {
+            background-color: #db3c8f;
+            transform: scale(1.1);
+        }
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .image-placeholder {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: #999;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>5er-Reihe Trainer</h1>
-    <h2 id="question"></h2>
-    <p id="stats">Richtig: 0 | Falsch: 0 | Zeit: 0s</p>
-    <div id="buttons-container"></div>
-    <div id="log"></div>
-    <script src="7lastApp.jsx"></script>
+    <h1>👑💞💚 Willkommen beim Training! 🍏🐛🍎</h1>
+    <div class="button-container">
+        <button class="button" onclick="window.location.href='2er.html'">🦆 2er 😊</button>
+        <button class="button" onclick="window.location.href='3er.html'">🚗 3er 🐥</button>
+        <button class="button" onclick="window.location.href='4er.html'">🏳️ 4er 🦋</button>
+        <button class="button" onclick="window.location.href='5er.html'">🍌 5er 🌈</button>
+        <button class="button" onclick="window.location.href='6er.html'">🚌 6er 🌻</button>
+        <button class="button" onclick="window.location.href='7er.html'">⚽ 7er 🍒</button>
+        <button class="button" onclick="window.location.href='8er.html'">🍓 8er 🚦</button>
+        <button class="button" onclick="window.location.href='9er.html'">🚜 9er 🍀</button>
+    </div>
+    <div class="image-container">
+        <div class="image-placeholder"><img src="Bild1.jpg" alt="" width="300" height="200"></div>
+        <div class="image-placeholder"><img src="Bild2.jpg" alt="" width="300" height="200"></div>
+        <div class="image-placeholder"><img src="Bild3.jpg" alt="" width="300" height="200"></div>
+    </div>
 </body>
 </html>
-

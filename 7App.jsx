@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const buttonsContainer = document.getElementById("buttons-container");
     const statsContainer = document.getElementById("stats");
     const logContainer = document.getElementById("log");
-    const restartButton = document.createElement("button");
+    const restartButton = document.createElement("button"); // Definition etc. von "Nochmal spielen"
     restartButton.textContent = "Nochmal spielen?";
     restartButton.style.display = "none";
     restartButton.style.marginTop = "20px";
@@ -52,15 +52,15 @@ document.addEventListener("DOMContentLoaded", function () {
         } while (number === lastNumber || (questionCounts[number] && questionCounts[number] >= 3));
         
         lastNumber = number;
-        correctAnswer = number * 5;
+        correctAnswer = number * 7; // Welche Zahlenreihe?
         questionCounts[number] = (questionCounts[number] || 0) + 1;
-        question.textContent = `${number} × 5 = ?`;
+        question.textContent = `${number} × 7 = ?`; // Rechenaufgabe am Bildschirm
         generateAnswerButtons();
     }
 
     function generateAnswerButtons() {
         buttonsContainer.innerHTML = "";
-        let answers = Array.from({ length: 10 }, (_, i) => (i + 1) * 5);
+        let answers = Array.from({ length: 10 }, (_, i) => (i + 1) * 7); // Mögliche Antworten 
         
         answers.forEach(answer => {
             let button = document.createElement("button");

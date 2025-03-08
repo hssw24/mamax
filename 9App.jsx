@@ -52,15 +52,15 @@ document.addEventListener("DOMContentLoaded", function () {
         } while (number === lastNumber || (questionCounts[number] && questionCounts[number] >= 3));
         
         lastNumber = number;
-        correctAnswer = number * 6; // Welche Zahlenreihe?
+        correctAnswer = number * 9; // Welche Zahlenreihe?
         questionCounts[number] = (questionCounts[number] || 0) + 1;
-        question.textContent = `${number} × 6 = ?`; // Rechenaufgabe am Bildschirm
+        question.textContent = `${number} × 9 = ?`; // Rechenaufgabe am Bildschirm
         generateAnswerButtons();
     }
 
     function generateAnswerButtons() {
         buttonsContainer.innerHTML = "";
-        let answers = Array.from({ length: 10 }, (_, i) => (i + 1) * 6); // Mögliche Antworten 
+        let answers = Array.from({ length: 10 }, (_, i) => (i + 1) * 9); // Mögliche Antworten 
         
         answers.forEach(answer => {
             let button = document.createElement("button");
