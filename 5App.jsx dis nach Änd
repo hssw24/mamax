@@ -3,7 +3,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const buttonsContainer = document.getElementById("buttons-container");
     const statsContainer = document.getElementById("stats");
     const logContainer = document.getElementById("log");
-    const restartButton = document.createElement("button"); // Definition etc. von "Nochmal spielen"
+    
+    const remainingQuestionsContainer = document.createElement("div");
+    remainingQuestionsContainer.id = "remaining-questions";
+    remainingQuestionsContainer.style.marginTop = "10px";
+    remainingQuestionsContainer.style.fontSize = "16px";
+    statsContainer.appendChild(remainingQuestionsContainer);
+
+    const restartButton = document.createElement("button");
     restartButton.textContent = "Nochmal spielen?";
     restartButton.style.display = "none";
     restartButton.style.marginTop = "20px";
@@ -26,12 +33,13 @@ document.addEventListener("DOMContentLoaded", function () {
     let correctCount = 0;
     let incorrectCount = 0;
     let startTime = Date.now();
-    let questionCounts = {};
-    let totalQuestions = 10 * 3; // Jede Aufgabe 3-mal abfragen
+    let totalQuestions = 10 * 3;
+    let remainingQuestions = Array(10).fill(3);
 
     function updateStats() {
         let elapsedTime = ((Date.now() - startTime) / 1000).toFixed(1);
         statsContainer.textContent = `Richtig: ${correctCount} | Falsch: ${incorrectCount} | Zeit: ${elapsedTime}s`;
+        remainingQuestionsContainer.textContent = `Verbleibende Aufgaben: ${remainingQuestions.map((count, index) => `${index + 1}x5 (${count})`).join(", ")}`;
     }
 
     function logIncorrectAnswer(givenAnswer, correctAnswer) {
@@ -41,50 +49,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function generateQuestion() {
-        if (Object.values(questionCounts).reduce((a, b) => a + b, 0) >= totalQuestions) {
+        if (remainingQuestions.reduce((a, b) => a + b, 0) === 0) {
             endGame();
             return;
         }
-    
-        let number;
-        let remainingTasks = Object.entries(questionCounts).filter(([_, count]) => count < 3).length; // Anzahl verbleibender Aufgaben
+
+        let availableNumbers = remainingQuestions
+            .map((count, index) => (count > 0 ? index + 1 : null))
+            .filter(n => n !== null);
         
-        do {
-            number = Math.floor(Math.random() * 10) + 1;
-        } while (remainingTasks > 3 && number === lastNumber || (questionCounts[number] && questionCounts[number] >= 3)); 
-        // Erlaubt doppelte Aufgaben nacheinander, wenn nur noch 3 oder weniger übrig sind
+        let number = availableNumbers[Math.floor(Math.random() * availableNumbers.length)];
         
         lastNumber = number;
         correctAnswer = number * 5;
-        questionCounts[number] = (questionCounts[number] || 0) + 1;
+        remainingQuestions[number - 1]--;
         question.textContent = `${number} × 5 = ?`;
         generateAnswerButtons();
+        updateStats();
     }
-    
-
-    /*
-    function generateQuestion() {
-        if (Object.values(questionCounts).reduce((a, b) => a + b, 0) >= totalQuestions) {
-            endGame();
-            return;
-        }
-
-        let number;
-        do {
-            number = Math.floor(Math.random() * 10) + 1;
-        } while (number === lastNumber || (questionCounts[number] && questionCounts[number] >= 3));
-        
-        lastNumber = number;
-        correctAnswer = number * 5; // Welche Zahlenreihe?
-        questionCounts[number] = (questionCounts[number] || 0) + 1;
-        question.textContent = `${number} × 5 = ?`; // Rechenaufgabe am Bildschirm
-        generateAnswerButtons();
-    }
-*/
 
     function generateAnswerButtons() {
         buttonsContainer.innerHTML = "";
-        let answers = Array.from({ length: 10 }, (_, i) => (i + 1) * 5); // Mögliche Antworten 
+        let answers = Array.from({ length: 10 }, (_, i) => (i + 1) * 5);
         
         answers.forEach(answer => {
             let button = document.createElement("button");
@@ -120,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
         correctCount = 0;
         incorrectCount = 0;
         startTime = Date.now();
-        questionCounts = {};
+        remainingQuestions = Array(10).fill(3);
         restartButton.style.display = "none";
         logContainer.innerHTML = "";
         generateQuestion();
