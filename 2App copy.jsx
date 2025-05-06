@@ -81,7 +81,7 @@ function generateQuestion() {
     }
 */
 
-
+/*
     function generateAnswerButtons() {
         buttonsContainer.innerHTML = "";
         let answers = Array.from({ length: 10 }, (_, i) => (i + 1) * 2); // Mögliche Antworten 
@@ -109,9 +109,8 @@ function generateQuestion() {
             buttonsContainer.appendChild(button);
         });
     }
+*/
 
-
-/*
 function generateAnswerButtons() {
     buttonsContainer.innerHTML = "";
 
@@ -149,7 +148,7 @@ function generateAnswerButtons() {
         buttonsContainer.appendChild(button);
     });
 }
-*/
+
 
     function endGame() {
         question.textContent = "Übung beendet!";

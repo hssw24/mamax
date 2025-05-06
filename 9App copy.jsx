@@ -40,51 +40,36 @@ document.addEventListener("DOMContentLoaded", function () {
         logContainer.prepend(logEntry);
     }
 
-function generateQuestion() {
-    if (Object.values(questionCounts).reduce((a, b) => a + b, 0) >= totalQuestions) {
-        endGame();
-        return;
-    }
-
-    let number;
-    let remainingTasks = Object.entries(questionCounts).filter(([_, count]) => count < 3).length; // Anzahl verbleibender Aufgaben
-    
-    do {
-        number = Math.floor(Math.random() * 10) + 1;
-    } while (remainingTasks > 3 && number === lastNumber || (questionCounts[number] && questionCounts[number] >= 3)); 
-    // Erlaubt doppelte Aufgaben nacheinander, wenn nur noch 3 oder weniger übrig sind
-    
-    lastNumber = number;
-    correctAnswer = number * 2;
-    questionCounts[number] = (questionCounts[number] || 0) + 1;
-    question.textContent = `${number} × 2 = ?`;
-    generateAnswerButtons();
-}
-
-/*
     function generateQuestion() {
         if (Object.values(questionCounts).reduce((a, b) => a + b, 0) >= totalQuestions) {
             endGame();
             return;
         }
-
+    
         let number;
+        let remainingTasks = Object.entries(questionCounts).filter(([_, count]) => count < 3).length; // Anzahl verbleibender Aufgaben
+        
         do {
             number = Math.floor(Math.random() * 10) + 1;
-        } while (number === lastNumber || (questionCounts[number] && questionCounts[number] >= 3));
+        } while (remainingTasks > 3 && number === lastNumber || (questionCounts[number] && questionCounts[number] >= 3)); 
+        // Erlaubt doppelte Aufgaben nacheinander, wenn nur noch 3 oder weniger übrig sind
         
         lastNumber = number;
-        correctAnswer = number * 2; // Welche Zahlenreihe?
+        correctAnswer = number * 9;
         questionCounts[number] = (questionCounts[number] || 0) + 1;
-        question.textContent = `${number} × 2 = ?`; // Rechenaufgabe am Bildschirm
+        question.textContent = `${number} × 9 = ?`;
         generateAnswerButtons();
     }
-*/
-
-
+    
     function generateAnswerButtons() {
         buttonsContainer.innerHTML = "";
-        let answers = Array.from({ length: 10 }, (_, i) => (i + 1) * 2); // Mögliche Antworten 
+        let answers = Array.from({ length: 10 }, (_, i) => (i + 1) * 9); // Mögliche Antworten 
+
+        for (let i = answers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [answers[i], answers[j]] = [answers[j], answers[i]];
+        }
+    
         
         answers.forEach(answer => {
             let button = document.createElement("button");
@@ -109,47 +94,6 @@ function generateQuestion() {
             buttonsContainer.appendChild(button);
         });
     }
-
-
-/*
-function generateAnswerButtons() {
-    buttonsContainer.innerHTML = "";
-
-    // Ursprünglicher Code – aufsteigend sortierte Antworten
-    // let answers = Array.from({ length: 10 }, (_, i) => (i + 1) * 2); // Mögliche Antworten 
-
-    // Neuer Code – Antworten in zufälliger Reihenfolge
-    let answers = Array.from({ length: 10 }, (_, i) => (i + 1) * 2);
-    // Shuffle-Funktion (Fisher-Yates-Algorithmus)
-    for (let i = answers.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [answers[i], answers[j]] = [answers[j], answers[i]];
-    }
-
-    answers.forEach(answer => {
-        let button = document.createElement("button");
-        button.textContent = answer;
-        button.classList.add("answer-button");
-        button.style.padding = "10px";
-        button.style.fontSize = "18px";
-        button.style.cursor = "pointer";
-        button.style.border = "1px solid #ccc";
-        button.style.borderRadius = "5px";
-        button.style.backgroundColor = "#f0f0f0";
-        button.addEventListener("click", function () {
-            if (answer === correctAnswer) {
-                correctCount++;
-                generateQuestion();
-            } else {
-                incorrectCount++;
-                logIncorrectAnswer(answer, correctAnswer);
-            }
-            updateStats();
-        });
-        buttonsContainer.appendChild(button);
-    });
-}
-*/
 
     function endGame() {
         question.textContent = "Übung beendet!";
